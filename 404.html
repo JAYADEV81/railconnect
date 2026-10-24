@@ -1,0 +1,3 @@
+{% extends "base.html" %}
+{% block title %}Page Not Found | RailConnect{% endblock %}
+{% block content %}<section class="empty-state error-page container"><div>404</div><h1>Looks like this track ends here.</h1><p>The page you requested could not be found.</p><a class="btn btn-dark" href="{{ url_for('home') }}">Return home →</a></section>{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}My Bookings | RailConnect{% endblock %}
+{% block content %}
+<section class="page-hero compact"><div class="container"><span class="eyebrow">YOUR JOURNEY RECORDS</span><h1>Find your <em>booking.</em></h1><p>Use the demo reference and the mobile number entered when booking.</p></div></section>
+<section class="container page-content lookup-layout">
+  <form class="panel lookup-form" method="post">
+    <span class="eyebrow dark">BOOKING LOOKUP</span><h2>Look up a reservation</h2>
+    <div class="field"><label for="pnr">DEMO PNR *</label><input id="pnr" name="pnr" required maxlength="10" minlength="10" pattern="[0-9]{10}" placeholder="10-digit booking reference"></div>
+    <div class="field"><label for="phone">MOBILE NUMBER *</label><input id="phone" name="phone" type="tel" required maxlength="10" minlength="10" pattern="[6-9][0-9]{9}" placeholder="Mobile used during booking"></div>
+    <button class="btn btn-dark" type="submit">Find booking →</button>
+    <p class="form-note">Your booking must have been created in this local demo database.</p>
+  </form>
+  <div class="lookup-results">
+    {% if searched and bookings %}
+      <span class="eyebrow dark">MATCHING RECORDS</span><h2>Your booking details</h2>
+      {% for b in bookings %}
+      <article class="booking-mini"><div class="mini-top"><span class="train-badge">{{ b.train_number }}</span><span class="status-pill {{ 'cancelled' if b.status=='Cancelled' else '' }}">{{ b.status }}</span></div><h3>{{ b.train_name }}</h3><div class="route-path"><div><strong>{{ b.source }}</strong><small>{{ b.departure }}</small></div><div class="route-duration"><span>→</span><small>{{ b.journey_date }}</small></div><div class="right"><strong>{{ b.destination }}</strong><small>{{ b.arrival }}</small></div></div><div class="mini-bottom"><span>PNR <strong>{{ b.pnr }}</strong></span><span>Total <strong>₹{{ '%.2f'|format(b.total_fare) }}</strong></span><a href="{{ url_for('confirmation', pnr=b.pnr) }}">Details →</a></div></article>
+      {% endfor %}
+    {% else %}
+      <div class="lookup-placeholder"><div class="placeholder-icon">⌕</div><h3>Your journey details will appear here.</h3><p>Enter your PNR and phone number to retrieve the saved record.</p></div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

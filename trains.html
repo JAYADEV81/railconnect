@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Search Trains | RailConnect{% endblock %}
+{% block content %}
+<section class="page-hero"><div class="container"><span class="eyebrow">SAMPLE TIMETABLE</span><h1>Find your <em>next train.</em></h1><p>Explore available demo services and choose a route to continue.</p></div></section>
+<section class="container page-content">
+  <form class="filter-panel" method="get" action="{{ url_for('trains') }}">
+    <div class="field"><label for="from">FROM STATION</label><input id="from" name="from" value="{{ source }}" placeholder="e.g. Chennai" maxlength="60"></div>
+    <div class="field"><label for="to">TO STATION</label><input id="to" name="to" value="{{ destination }}" placeholder="e.g. Coimbatore" maxlength="60"></div>
+    <div class="field"><label for="date">JOURNEY DATE</label><input id="date" type="date" name="date" value="{{ journey_date }}" min="{{ '' }}"></div>
+    <div class="field"><label for="class">CLASS</label><select id="class" name="class"><option value="SL" {% if travel_class=='SL' %}selected{% endif %}>Sleeper (SL)</option><option value="3A" {% if travel_class=='3A' %}selected{% endif %}>AC 3 Tier (3A)</option><option value="2A" {% if travel_class=='2A' %}selected{% endif %}>AC 2 Tier (2A)</option><option value="1A" {% if travel_class=='1A' %}selected{% endif %}>First AC (1A)</option><option value="CC" {% if travel_class=='CC' %}selected{% endif %}>Chair Car (CC)</option></select></div>
+    <button class="btn btn-dark" type="submit">Search ↗</button>
+  </form>
+  <div class="results-heading"><div><span class="eyebrow dark">ROUTE EXPLORER</span><h2>{{ trains|length }} sample service{% if trains|length != 1 %}s{% endif %} found</h2></div><span class="demo-chip">NOT LIVE AVAILABILITY</span></div>
+  {% if trains %}
+  <div class="train-list">
+  {% for train in trains %}
+    <article class="train-result">
+      <div class="train-result-head"><div><span class="train-badge">{{ train.train_number }}</span><h3>{{ train.train_name }}</h3></div><span class="sample-label">DEMO SERVICE</span></div>
+      <div class="train-timing"><div><strong>{{ train.departure }}</strong><span>{{ train.source }}</span></div><div class="timing-line"><span>{{ train.duration }}</span><i></i></div><div class="right"><strong>{{ train.arrival }}</strong><span>{{ train.destination }}</span></div></div>
+      <div class="train-result-bottom"><div><span class="muted">Base fare</span><strong class="fare">₹{{ "%.0f"|format(train.fare) }}</strong><span class="muted">/ passenger · Sleeper</span></div><a class="btn btn-gold" href="{{ url_for('booking', train_id=train.id, date=journey_date, **{'class': travel_class}) }}">Book this train →</a></div>
+    </article>
+  {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state"><div>⌕</div><h2>No matching sample trains</h2><p>Try a shorter station name such as “Chennai”, “Bengaluru”, or “Coimbatore”.</p><a class="btn btn-dark" href="{{ url_for('trains') }}">Show all trains</a></div>
+  {% endif %}
+  <p class="form-note">Train schedules, seat counts and fares on this page are sample data for a college project.</p>
+</section>
+{% endblock %}

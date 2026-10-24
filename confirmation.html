@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Booking Confirmation | RailConnect{% endblock %}
+{% block content %}
+<section class="confirmation-wrap container">
+  <div class="confirmation-card">
+    <div class="success-mark">✓</div><span class="eyebrow dark">BOOKING SAVED</span><h1>Your demo booking is <em>confirmed.</em></h1><p class="confirm-intro">A record has been saved to the RailConnect SQLite database. This is not a valid railway ticket.</p>
+    <div class="pnr-box"><span>DEMO BOOKING REFERENCE / PNR</span><strong>{{ booking.pnr }}</strong><button type="button" class="copy-btn" data-copy="{{ booking.pnr }}">Copy</button></div>
+    <div class="ticket-summary"><div class="ticket-heading"><div><span class="train-badge">{{ booking.train_number }}</span><h2>{{ booking.train_name }}</h2></div><span class="status-pill {{ 'cancelled' if booking.status=='Cancelled' else '' }}">{{ booking.status }}</span></div>
+      <div class="ticket-route"><div><strong>{{ booking.departure }}</strong><b>{{ booking.source }}</b></div><div class="ticket-arrow">······→</div><div class="right"><strong>{{ booking.arrival }}</strong><b>{{ booking.destination }}</b></div></div>
+      <div class="ticket-details"><div><small>PASSENGER</small><strong>{{ booking.passenger_name }}</strong></div><div><small>JOURNEY DATE</small><strong>{{ booking.journey_date }}</strong></div><div><small>CLASS</small><strong>{{ booking.travel_class }}</strong></div><div><small>PASSENGERS</small><strong>{{ booking.seats }}</strong></div><div><small>DEMO TOTAL</small><strong>₹{{ '%.2f'|format(booking.total_fare) }}</strong></div></div>
+    </div>
+    <div class="confirm-actions"><a class="btn btn-dark" href="{{ url_for('my_bookings') }}">Manage bookings →</a><a class="btn btn-outline" href="{{ url_for('home') }}">Back to home</a></div>
+    <p class="form-note">No payment was processed. This reference is only for demonstrating database-backed booking functionality.</p>
+  </div>
+</section>
+{% endblock %}

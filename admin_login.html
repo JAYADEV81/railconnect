@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}Admin Login | RailConnect{% endblock %}
+{% block content %}
+<section class="admin-login-wrap container"><form class="panel admin-login" method="post"><span class="eyebrow dark">DEMO ADMINISTRATION</span><h1>Welcome <em>back.</em></h1><p>Sign in to view saved booking records and sample train data.</p><div class="field"><label for="username">USERNAME</label><input id="username" name="username" required autocomplete="username" placeholder="Demo username"></div><div class="field"><label for="password">PASSWORD</label><input id="password" name="password" type="password" required autocomplete="current-password" placeholder="Demo password"></div><button class="btn btn-dark" type="submit">Open dashboard →</button><div class="admin-hint"><strong>Demo credentials</strong><br>Username: admin<br>Password: rail123</div><p class="form-note">For classroom demonstration only. This is not production-grade authentication.</p></form></section>
+{% endblock %}

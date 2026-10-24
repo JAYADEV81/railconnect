@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}RailConnect | Plan your next journey{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow"><span class="pulse"></span> YOUR JOURNEY, SIMPLIFIED</span>
+      <h1>There’s a whole<br><em>country to discover.</em></h1>
+      <p>Find your route, compare sample train services, and plan your next adventure from one simple place.</p>
+      <div class="hero-actions"><a class="btn btn-gold" href="#journey-search">Find a train <span>↗</span></a><a class="text-link" href="{{ url_for('about') }}">Explore RailConnect →</a></div>
+      <div class="trust-row"><div class="avatar-stack"><span>R</span><span>✦</span><span>✓</span></div><div><strong>Simple. Clear. Convenient.</strong><small>A student-built reservation demo</small></div></div>
+    </div>
+    <div class="hero-visual">
+      <div class="visual-sun"></div><div class="visual-line"></div>
+      <div class="route-tag tag-one"><span class="tag-dot"></span> Chennai Central <small>MAS</small></div>
+      <div class="route-tag tag-two"><span class="tag-dot orange"></span> Coimbatore <small>CBE</small></div>
+      <div class="train-illustration"><div class="train-front"><div class="train-window"></div><div class="train-window"></div><div class="train-window"></div><div class="train-nose"></div></div><div class="train-car"><i></i><i></i><i></i><i></i></div><div class="train-car second"><i></i><i></i><i></i><i></i></div><div class="train-wheels"><b></b><b></b><b></b><b></b><b></b><b></b></div></div>
+      <div class="visual-caption"><span>01 / THE JOURNEY</span><span>Made for curious minds ↗</span></div>
+    </div>
+  </div>
+</section>
+<section class="search-section" id="journey-search">
+  <div class="container">
+    <div class="search-heading"><div><span class="eyebrow dark">LET'S GET YOU THERE</span><h2>Where are you headed?</h2></div><span class="demo-chip">DEMO TRAIN DATA</span></div>
+    <form class="journey-form" action="{{ url_for('trains') }}" method="get">
+      <div class="field"><label for="from">FROM</label><div class="input-icon">◎ <input id="from" name="from" placeholder="Departure station" maxlength="60" required></div></div>
+      <button class="swap-btn" type="button" id="swapStations" aria-label="Swap stations">⇄</button>
+      <div class="field"><label for="to">TO</label><div class="input-icon">⌖ <input id="to" name="to" placeholder="Arrival station" maxlength="60" required></div></div>
+      <div class="field"><label for="date">JOURNEY DATE</label><div class="input-icon">▦ <input id="date" type="date" name="date" min="{{ today }}" value="{{ today }}" required></div></div>
+      <div class="field"><label for="class">TRAVEL CLASS</label><div class="input-icon">▤ <select id="class" name="class"><option value="SL">Sleeper (SL)</option><option value="3A">AC 3 Tier (3A)</option><option value="2A">AC 2 Tier (2A)</option><option value="1A">First AC (1A)</option><option value="CC">Chair Car (CC)</option></select></div></div>
+      <button class="btn btn-dark search-submit" type="submit">Search trains <span>→</span></button>
+    </form>
+    <p class="form-note">✦ Try routes such as Chennai Central → Coimbatore or Bengaluru City → Chennai Central.</p>
+  </div>
+</section>
+<section class="container section-pad">
+  <div class="section-title"><div><span class="eyebrow dark">THE RAILCONNECT WAY</span><h2>Travel planning, without the fuss.</h2></div><p>A clean, simple demo experience from your first search to your booking reference.</p></div>
+  <div class="feature-grid">
+    <article class="feature-card"><div class="feature-icon violet">⌕</div><span class="feature-no">01 / DISCOVER</span><h3>Find your route</h3><p>Search our sample timetable by departure and arrival station.</p></article>
+    <article class="feature-card"><div class="feature-icon amber">▣</div><span class="feature-no">02 / RESERVE</span><h3>Add passengers</h3><p>Fill in passenger details and see an estimated fare for your selected class.</p></article>
+    <article class="feature-card"><div class="feature-icon green">✓</div><span class="feature-no">03 / KEEP TRACK</span><h3>Manage bookings</h3><p>Look up your saved demo booking using your PNR and mobile number.</p></article>
+  </div>
+</section>
+<section class="container popular-section">
+  <div class="section-title"><div><span class="eyebrow dark">A FEW PLACES TO START</span><h2>Featured train routes</h2></div><a class="text-link" href="{{ url_for('trains') }}">View all trains →</a></div>
+  <div class="route-grid">{% for train in featured %}
+    <article class="route-card"><div class="route-card-top"><span class="train-badge">▰ {{ train.train_number }}</span><span class="sample-label">SAMPLE</span></div><h3>{{ train.train_name }}</h3><div class="route-path"><div><strong>{{ train.departure }}</strong><small>{{ train.source }}</small></div><div class="route-duration"><span>······✦······</span><small>{{ train.duration }}</small></div><div class="right"><strong>{{ train.arrival }}</strong><small>{{ train.destination }}</small></div></div><div class="route-card-bottom"><span>From <strong>₹{{ "%.0f"|format(train.fare) }}</strong> <small>/ base fare</small></span><a href="{{ url_for('booking', train_id=train.id) }}">Book →</a></div></article>
+  {% endfor %}</div>
+</section>
+<section class="bottom-cta"><div class="container cta-inner"><div><span class="eyebrow">YOUR NEXT STORY IS OUT THERE</span><h2>Ready to get on board?</h2><p>Start with a route. The rest is just a journey.</p></div><a class="btn btn-gold" href="{{ url_for('trains') }}">Explore trains ↗</a></div></section>
+{% endblock %}

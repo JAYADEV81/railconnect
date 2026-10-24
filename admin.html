@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard | RailConnect{% endblock %}
+{% block content %}
+<section class="page-hero compact admin-hero"><div class="container admin-title-row"><div><span class="eyebrow">CONTROL ROOM / DEMO</span><h1>Admin <em>dashboard.</em></h1><p>Review local reservation records saved in SQLite.</p></div><a class="btn btn-outline-light" href="{{ url_for('admin_logout') }}">Log out ↗</a></div></section>
+<section class="container page-content">
+  <div class="admin-stats"><article><span>TRAIN RECORDS</span><strong>{{ total_trains }}</strong><small>Sample timetable entries</small></article><article><span>BOOKING RECORDS</span><strong>{{ total_bookings }}</strong><small>All saved bookings</small></article><article><span>CONFIRMED FARE TOTAL</span><strong>₹{{ '%.2f'|format(revenue) }}</strong><small>Demo amount, not payments</small></article></div>
+  <div class="admin-table-panel"><div class="table-heading"><div><span class="eyebrow dark">DATABASE / BOOKINGS</span><h2>Reservation records</h2></div><span class="demo-chip">SQLite · bookings</span></div>
+  {% if bookings %}
+  <div class="table-scroll"><table><thead><tr><th>PNR</th><th>Passenger</th><th>Train / Route</th><th>Date</th><th>Class</th><th>Passengers</th><th>Total</th><th>Status / Action</th></tr></thead><tbody>
+  {% for b in bookings %}<tr><td><strong>{{ b.pnr }}</strong></td><td>{{ b.passenger_name }}<small>{{ b.phone }}</small></td><td>{{ b.train_number }} · {{ b.train_name }}<small>{{ b.source }} → {{ b.destination }}</small></td><td>{{ b.journey_date }}</td><td>{{ b.travel_class }}</td><td>{{ b.seats }}</td><td>₹{{ '%.2f'|format(b.total_fare) }}</td><td><span class="status-pill {{ 'cancelled' if b.status=='Cancelled' else '' }}">{{ b.status }}</span>{% if b.status != 'Cancelled' %}<form class="inline-form" method="post" action="{{ url_for('cancel_booking', booking_id=b.id) }}" onsubmit="return confirm('Mark this demo booking as cancelled?')"><button class="table-action" type="submit">Cancel</button></form>{% endif %}</td></tr>{% endfor %}
+  </tbody></table></div>
+  {% else %}<div class="empty-state compact-empty"><div>▤</div><h3>No bookings yet</h3><p>Create a booking from the website and it will appear here.</p><a class="btn btn-dark" href="{{ url_for('trains') }}">Try a booking →</a></div>{% endif %}
+  </div>
+  <div class="admin-table-panel"><div class="table-heading"><div><span class="eyebrow dark">DATABASE / TRAINS</span><h2>Sample train records</h2></div><span class="demo-chip">SQLite · trains</span></div><div class="table-scroll"><table><thead><tr><th>Number</th><th>Train name</th><th>Source</th><th>Destination</th><th>Departure</th><th>Arrival</th><th>Base fare</th><th>Sample seats</th></tr></thead><tbody>{% for t in trains %}<tr><td>{{ t.train_number }}</td><td>{{ t.train_name }}</td><td>{{ t.source }}</td><td>{{ t.destination }}</td><td>{{ t.departure }}</td><td>{{ t.arrival }}</td><td>₹{{ '%.0f'|format(t.fare) }}</td><td>{{ t.seats }}</td></tr>{% endfor %}</tbody></table></div></div>
+</section>
+{% endblock %}

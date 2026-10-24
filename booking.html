@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Book Tickets | RailConnect{% endblock %}
+{% block content %}
+<section class="page-hero compact"><div class="container"><span class="eyebrow">PASSENGER DETAILS</span><h1>Make it a <em>reservation.</em></h1><p>Enter your details to save a demo booking to the local database.</p></div></section>
+<section class="container page-content booking-layout">
+  <div class="booking-main">
+    <div class="panel">
+      <div class="panel-heading"><div><span class="eyebrow dark">STEP 01 / YOUR TRAIN</span><h2>{{ train.train_name }}</h2></div><span class="train-badge">{{ train.train_number }}</span></div>
+      <div class="train-timing booking-timing"><div><strong>{{ train.departure }}</strong><span>{{ train.source }}</span></div><div class="timing-line"><span>{{ train.duration }}</span><i></i></div><div class="right"><strong>{{ train.arrival }}</strong><span>{{ train.destination }}</span></div></div>
+    </div>
+    <form class="panel booking-form" method="post" id="bookingForm">
+      <div class="panel-heading"><div><span class="eyebrow dark">STEP 02 / PASSENGER</span><h2>Who’s travelling?</h2></div><span class="required-note">* Required fields</span></div>
+      <div class="form-grid">
+        <div class="field span-2"><label for="passenger_name">FULL NAME *</label><input id="passenger_name" name="passenger_name" value="{{ form.get('passenger_name','') }}" placeholder="As shown on your ID" required maxlength="80" pattern="[A-Za-z][A-Za-z .'-]{1,79}" title="Use letters, spaces, apostrophes, dots or hyphens." autocomplete="name"></div>
+        <div class="field"><label for="age">AGE *</label><input id="age" name="age" type="number" value="{{ form.get('age','') }}" min="1" max="120" required placeholder="Age in years"></div>
+        <div class="field"><label for="gender">GENDER *</label><select id="gender" name="gender" required><option value="">Select</option><option {% if form.get('gender')=='Female' %}selected{% endif %}>Female</option><option {% if form.get('gender')=='Male' %}selected{% endif %}>Male</option><option {% if form.get('gender')=='Other' %}selected{% endif %}>Other</option><option {% if form.get('gender')=='Prefer not to say' %}selected{% endif %}>Prefer not to say</option></select></div>
+        <div class="field"><label for="email">EMAIL ADDRESS *</label><input id="email" name="email" type="email" value="{{ form.get('email','') }}" placeholder="you@example.com" required maxlength="120" autocomplete="email"></div>
+        <div class="field"><label for="phone">MOBILE NUMBER *</label><input id="phone" name="phone" type="tel" value="{{ form.get('phone','') }}" placeholder="10-digit mobile" required pattern="[6-9][0-9]{9}" maxlength="10" minlength="10" title="Enter a valid 10-digit Indian mobile number." autocomplete="tel"></div>
+        <div class="field"><label for="journey_date">JOURNEY DATE *</label><input id="journey_date" name="journey_date" type="date" value="{{ journey_date }}" min="{{ today }}" required></div>
+        <div class="field"><label for="travel_class">TRAVEL CLASS *</label><select id="travel_class" name="travel_class" required><option value="SL" {% if travel_class=='SL' %}selected{% endif %}>Sleeper (SL)</option><option value="3A" {% if travel_class=='3A' %}selected{% endif %}>AC 3 Tier (3A)</option><option value="2A" {% if travel_class=='2A' %}selected{% endif %}>AC 2 Tier (2A)</option><option value="1A" {% if travel_class=='1A' %}selected{% endif %}>First AC (1A)</option><option value="CC" {% if travel_class=='CC' %}selected{% endif %}>Chair Car (CC)</option></select></div>
+        <div class="field"><label for="seats">PASSENGERS *</label><input id="seats" name="seats" type="number" min="1" max="6" value="{{ form.get('seats','1') }}" required></div>
+        <div class="field"><label for="base_fare">BASE FARE (READ ONLY)</label><input id="base_fare" value="₹{{ '%.0f'|format(train.fare) }}" readonly aria-readonly="true"></div>
+        <div class="field span-2"><label for="special_request">SPECIAL REQUEST (OPTIONAL)</label><textarea id="special_request" name="special_request" rows="3" maxlength="300" placeholder="Any note for this demo booking (optional)"></textarea></div>
+        <div class="field span-2 checkbox-field"><input id="terms" name="terms" type="checkbox" required><label for="terms">I confirm the information is correct and understand this is a college demo, not a real railway ticket.</label></div>
+        <input type="hidden" name="train_id" value="{{ train.id }}">
+        <button class="btn btn-dark submit-booking span-2" type="submit">Confirm demo booking <span>→</span></button>
+      </div>
+    </form>
+  </div>
+  <aside class="booking-aside"><div class="fare-panel"><span class="eyebrow">FARE ESTIMATE</span><h2 id="fareEstimate">₹{{ '%.0f'|format(train.fare) }}</h2><p>Estimated total for selected passengers and class.</p><div class="fare-row"><span>Base fare / person</span><strong>₹{{ '%.0f'|format(train.fare) }}</strong></div><div class="fare-row"><span>Selected class</span><strong id="classLabel">{{ travel_class }}</strong></div><div class="fare-row"><span>Passengers</span><strong id="seatLabel">1</strong></div><div class="fare-total"><span>Demo total</span><strong id="fareTotal">₹{{ '%.0f'|format(train.fare) }}</strong></div><small>Estimate only. No payment is collected.</small></div><div class="secure-note"><span>ⓘ</span><p><strong>Demo booking only</strong><br>Your booking is stored in the SQLite database on the computer running this project. No real ticket is issued.</p></div></aside>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+window.RAIL_FARE = {{ train.fare|tojson }};
+</script>
+{% endblock %}

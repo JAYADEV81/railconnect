@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}About RailConnect{% endblock %}
+{% block content %}
+<section class="page-hero"><div class="container"><span class="eyebrow">OUR STORY</span><h1>A little less planning.<br><em>A lot more exploring.</em></h1><p>RailConnect is a student-built demonstration of a railway reservation portal.</p></div></section>
+<section class="container about-layout section-pad"><div class="about-big"><span class="eyebrow dark">THE IDEA</span><h2>Technology should make the first step feel easy.</h2><p>This project demonstrates how a responsive front end can connect to a Python Flask backend and a SQLite database to save and retrieve reservation records.</p><p>It includes train search, passenger forms, fare estimates, booking references, and a simple admin dashboard for classroom demonstration.</p><a class="btn btn-dark" href="{{ url_for('trains') }}">Explore sample trains →</a></div><div class="about-stats"><div><strong>07</strong><span>Website pages</span></div><div><strong>HTML5</strong><span>Semantic structure</span></div><div><strong>Flask</strong><span>Backend framework</span></div><div><strong>SQLite</strong><span>Local database</span></div></div></section>
+<section class="container section-pad"><div class="notice-card"><span>ⓘ</span><div><h3>Important project limitation</h3><p>RailConnect is not operated by Indian Railways or IRCTC. The trains, timings and fares are sample records. It does not check live seat availability, process payments, or issue valid tickets.</p></div></div></section>
+{% endblock %}
